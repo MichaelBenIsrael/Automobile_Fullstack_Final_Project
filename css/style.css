@@ -114,6 +114,41 @@ body{
    outline:none;
 }
 
+.form-control .tooltip{
+    position: relative;
+    display:inline-block;
+    border-bottom: 1px dotted var(--black-color);
+}
+
+.form-control .tooltip .tooltiptext{
+    position: absolute;
+    top: -10px;
+    background-color: var(--black-color);
+    color:var(--white-color);
+    visibility: hidden;
+    width:300px;
+    text-align: center;
+    padding:5px 0;
+    border-radius: 5px;
+    z-index: 1;
+    font-size:9px;
+}
+
+.form-control .tooltip .tooltiptext::after{
+    content: " ";
+    position: absolute;
+    bottom:100%;
+    left:50%;
+    margin-left:-5px;
+    border-width:5px;
+    border-style:solid;
+    border-color:transparent transparent var(--black-color) transparent;
+}
+
+.form-control:hover .tooltip .tooltiptext{
+    visibility: visible;
+}
+
 @media screen and (min-width:600px) {
     .container{
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

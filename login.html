@@ -14,12 +14,25 @@
         <form>
             <div class="form-control">
                 <input type="email" id="email" placeholder="Email Address" required>
-                <label for="email" class="tooltip"></label>
+                <div class="tooltip">
+                    <span class="tooltiptext">
+                        Example: johndoe@gmail.com
+                    </span>
+                </div>
             </div>
 
             <div class="form-control">
                 <input type="password" id="password" placeholder="Password" required>
-                <label for="password" class="tooltip"></label>
+                <div class="tooltip">
+                    <span class="tooltiptext">
+                        Password must be atleast 6 characters long.
+                        <br/>Password must contain:
+                        <br/>Upper case letter
+                        <br/>Lower case letter
+                        <br/>Special character
+                        <br/>A number.
+                    </span>
+                </div>
             </div>
 
             <button class="btn">Login</button>
