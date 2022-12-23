@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
+
+/*---------------
+    Variables
+---------------*/
+:root{
+    --primary-color: #3CADFE;
+    --black-color: #000;
+    --white-color:#fff;
+    --text-color: var(--black-color);
+    --background-color: var(--white-color);
+}
+
+
+/*---------------
+    Globals
+---------------*/
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background-color: var(--background-color);
+    color:var(--text-color);
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height:100vh;
+    overflow: hidden;
+    margin:0;
+}
+
+
+.container{
+    padding: 20px 40px;
+    border-radius: 5px;
+}
+
+.container h1{
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 70px;
+    font-family: inherit;
+    font-weight: 300;
+    font-size:27px
+}
+
+.container a{
+    text-decoration: underline;
+    color: var(--text-color);
+}
+
+.container a:hover{
+    color: var(--primary-color);
+}
+
+.btn{
+    color:var(--primary-color);
+    cursor: pointer;
+    display:inline-block;
+    width:100%;
+    background: transparent;
+    padding:5px;
+    font-family: inherit;
+    font-size:16px;
+    border: 1px var(--primary-color) solid;
+    border-radius: 5px;
+}
+
+.btn:active{
+    transform: scale(0.98);
+}
+
+.btn:hover{
+    color:var(--background-color);
+    background-color: var(--primary-color);
+}
+
+.btn:focus{
+    outline:none;
+}
+
+.text{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.form-control{
+    position:relative;
+    margin:20px 0 70px;
+    width:300px;
+}
+
+.form-control input{
+    background-color: transparent;
+    color:var(--text-color);
+    border:0;
+    border-bottom: 2px var(--text-color) solid;
+    display:block;
+    width:100%;
+    padding:5px 0;
+    font-size:18px;
+}
+
+.form-control input::placeholder{
+    color:var(--text-color);
+}
+
+.form-control input:focus, 
+.form-control input:valid{
+   outline:none;
+}
+
+@media screen and (min-width:600px) {
+    .container{
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+    .container h1{
+        margin-bottom: 100px;
+        font-size:30px;
+    }
+    .btn{
+        font-size:18px;
+    }
+    .form-control{
+        width:500px;
+        margin: 20px 0 100px;
+    }
+}
+
