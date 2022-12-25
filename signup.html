@@ -10,7 +10,7 @@
 <body>
 
     <div class="container">
-        <h1>Login to your account</h1>
+        <h1>Create a new account</h1>
         <form>
             <div class="form-control">
                 <input type="email" id="email" placeholder="Email Address" required>
@@ -35,9 +35,18 @@
                 </div>
             </div>
 
-            <button class="btn">Login</button>
+            <div class="form-control">
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                <div class="tooltip">
+                    <span class="tooltiptext">
+                        Confirm password should match password.
+                    </span>
+                </div>
+            </div>
 
-            <p class="text">Don't have an account? <a href="signup.html">Signup!</a>
+            <button class="btn">Create Account</button>
+
+            <p class="text">Already have an account? <a href="login.html">Login!</a>
             <br/><a href="forgotpassword.html">Forgot Password?</a></p>
         </form>
     </div>
