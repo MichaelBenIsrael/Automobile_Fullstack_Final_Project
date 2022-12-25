@@ -109,7 +109,7 @@ body{
     color:var(--text-color);
 }
 
-.form-control input:focus, 
+.form-control input:focus,
 .form-control input:valid{
    outline:none;
 }
@@ -163,6 +163,10 @@ body{
     .form-control{
         width:500px;
         margin: 20px 0 100px;
+    }
+
+    .form-control .tooltip{
+        left:100px;
     }
 }
 
