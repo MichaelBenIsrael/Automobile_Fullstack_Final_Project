@@ -1,9 +1,19 @@
-const navbar = document.getElementById("navbar");
-const toggleNav = () => {
-    if(navbar.className == "navbar")
-    {
-        navbar.className += " responsive";
-    }else{
-        navbar.className = "navbar";
-    }
-}
+const getElement = (selector) => {
+    const element = document.querySelector(selector)
+  
+    if (element) return element
+    throw Error(
+      `Please double check your class names, there is no ${selector} class`
+    )
+  }
+  
+  const links = getElement('.nav-links')
+  const navBtnDOM = getElement('.nav-btn')
+  
+  navBtnDOM.addEventListener('click', () => {
+    links.classList.toggle('show-links')
+  })
+  
+  const date = getElement('#date')
+  const currentYear = new Date().getFullYear()
+  date.textContent = currentYear
