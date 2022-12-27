@@ -6,10 +6,8 @@
 ---------------*/
 :root{
     --primary-color: #3CADFE;
-    --black-color: #000;
-    --white-color:#fff;
-    --text-color: var(--black-color);
-    --background-color: var(--white-color);
+    --text-color: black;
+    --background-color: white;
 }
 
 
@@ -119,14 +117,9 @@ a:hover{
 
 .navbar a.active{
     background-color:var(--primary-color);
-    color:var(--white-color);
+    color:white;
 }
 
-.navbar a.icon{
-    float:right;
-    display:block;
-    color:var(--primary-color);
-}
 .navbar.responsive{
     position: relative;
     right:0;
@@ -137,6 +130,12 @@ a:hover{
     float:none;
     display:block;
     text-align:left;
+}
+
+.navbar a.icon{
+    float:right;
+    display:block;
+    color:var(--primary-color);
 }
 
 .container{
@@ -234,14 +233,14 @@ textarea:focus{
 .form-control .tooltip{
     position: relative;
     display:inline-block;
-    border-bottom: 1px dotted var(--black-color);
+    border-bottom: 1px dotted var(--text-color);
 }
 
 .form-control .tooltip .tooltiptext{
     position: absolute;
     top: -10px;
-    background-color: var(--black-color);
-    color:var(--white-color);
+    background-color: var(--text-color);
+    color:white;
     visibility: hidden;
     width:300px;
     text-align: center;
@@ -259,7 +258,7 @@ textarea:focus{
     margin-left:-5px;
     border-width:5px;
     border-style:solid;
-    border-color:transparent transparent var(--black-color) transparent;
+    border-color:transparent transparent var(--text-color) transparent;
 }
 
 .form-control:hover .tooltip .tooltiptext{
