@@ -32,6 +32,12 @@ Globals
 ===============
 */
 
+html {
+    font-size: 100%;
+}
+
+/*16px*/
+
 *,
 ::after,
 ::before {
@@ -45,6 +51,7 @@ body {
     font-weight: 400;
     line-height: 1.75;
     color: var(--text-color);
+    margin:0;
 }
 
 p {
@@ -237,8 +244,8 @@ Navbar
     transition: var(--transition);
 }
 
-.nav-links .active{
-    color:var(--primary);
+.nav-links .active {
+    color: var(--primary);
     font-weight: bold;
 }
 
@@ -263,7 +270,7 @@ Page
     padding-top: 2rem;
     min-height: calc(100vh - (6rem + 4rem));
 
-    display:flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
@@ -299,67 +306,67 @@ Form
 ===============
 */
 
-form{
-    display:flex;
+form {
+    display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.form-control{
-    position:relative;
-    margin:20px 0 70px;
-    width:300px;
+.form-control {
+    position: relative;
+    margin: 20px 0 70px;
+    width: 300px;
 }
 
-.form-control input{
+.form-control input {
     background-color: transparent;
-    color:var(--text-color);
-    border:0;
+    color: var(--text-color);
+    border: 0;
     border-bottom: 2px var(--primary) solid;
-    display:block;
-    width:100%;
-    padding:5px 0;
-    font-size:18px;
+    display: block;
+    width: 100%;
+    padding: 5px 0;
+    font-size: 18px;
 }
 
 .form-control input:focus,
 .form-control input:valid,
-textarea:focus{
-   outline:none;
+textarea:focus {
+    outline: none;
 }
 
-.form-control .tooltip{
+.form-control .tooltip {
     position: relative;
-    display:inline-block;
+    display: inline-block;
     border-bottom: 1px dotted var(--text-color);
 }
 
-.form-control .tooltip .tooltiptext{
+.form-control .tooltip .tooltiptext {
     position: absolute;
     top: -10px;
     background-color: var(--text-color);
-    color:var(--white);
+    color: var(--white);
     visibility: hidden;
-    width:300px;
+    width: 300px;
     text-align: center;
-    padding:5px 0;
+    padding: 5px 0;
     border-radius: 5px;
     z-index: 1;
-    font-size:9px;
+    font-size: 9px;
 }
 
-.form-control .tooltip .tooltiptext::after{
+.form-control .tooltip .tooltiptext::after {
     content: " ";
     position: absolute;
-    bottom:100%;
-    left:50%;
-    margin-left:-5px;
-    border-width:5px;
-    border-style:solid;
-    border-color:transparent transparent var(--text-color) transparent;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent var(--text-color) transparent;
 }
 
-.form-control:hover .tooltip .tooltiptext{
+.form-control:hover .tooltip .tooltiptext {
     visibility: visible;
 }
 
@@ -369,27 +376,27 @@ textarea:focus{
 Grid
 ===============
 */
-.grid-item-support{
-    margin-top:100px;
+.grid-item-support {
+    margin-top: 100px;
 }
 
-.support{
-    position:relative;
-    margin-bottom:20px;
-    width:300px;
+.support {
+    position: relative;
+    margin-bottom: 20px;
+    width: 300px;
     border-bottom: 2px solid var(--primary);
 }
 
-.grid-item-support .support:last-child{
+.grid-item-support .support:last-child {
     border-bottom: none;
 }
 
-.support .reverse-btn{
-    margin-bottom:10px;
+.support .reverse-btn {
+    margin-bottom: 10px;
 }
 
-.support .text{
-    text-align:left;
+.support .text {
+    text-align: left;
 }
 
 
@@ -426,18 +433,20 @@ Grid
         font-size: 1rem;
     }
 
-    .grid-item-form{
-        grid-area:form;
+    .grid-item-form {
+        grid-area: form;
     }
-    .grid-item-support{
-        margin-top:0;
-        grid-area:support;
+
+    .grid-item-support {
+        margin-top: 0;
+        grid-area: support;
     }
-    .grid-container{
-        display:grid;
+
+    .grid-container {
+        display: grid;
         grid-template-areas:
-        'form support';
-        gap:50px;
+            'form support';
+        gap: 20rem;
     }
 
 }
