@@ -1,81 +1,43 @@
 import { React } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../common/Navbar";
+import Button from "../common/Button";
+import FormControl from "../common/FormControl";
 
 const Signup = () => (
   <>
-    <nav className="navbar">
-      <div className="nav-center">
-        <div className="nav-header">
-          <a href="#" className="nav-logo">
-            SiteLogo
-          </a>
-        </div>
-      </div>
-    </nav>
+    <Navbar />
 
     <main className="page">
       <h1>Create a new account</h1>
       <form>
-        <div className="form-control">
-          <input type="email" id="email" placeholder="Email Address" required />
-          <div className="tooltip">
-            <span className="tooltiptext">Example: johndoe@gmail.com</span>
-          </div>
-        </div>
+        <FormControl
+          inputType="email" inputId="email" placeHolder="Email Address" isRequired={true}
+          containToolTip={true} toolTipContent="Example: johndoe@gmail.com" />
 
-        <div className="form-control">
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            required
-          />
-          <div className="tooltip">
-            <span className="tooltiptext">
-              Password must be atleast 6 characters long.
-              <br />
-              Password must contain:
-              <br />
-              Upper case letter
-              <br />
-              Lower case letter
-              <br />
-              Special character
-              <br />A number.
-            </span>
-          </div>
-        </div>
+        <FormControl
+          inputType="password" inputId="password" placeHolder="Password" isRequired={true}
+          containToolTip={true} toolTipContent="Password must be atleast 6 characters long.
+        Password must contain:
+        Upper case letter
+        Lower case letter
+        Special character
+        A number."/>
 
-        <div className="form-control">
-          <input
-            type="password"
-            id="confirmPassword"
-            placeholder="Confirm Password"
-            required
-          />
-          <div className="tooltip">
-            <span className="tooltiptext">
-              Confirm password should match password.
-            </span>
-          </div>
-        </div>
+        <FormControl
+          inputType="password" inputId="confirmPassword" placeHolder="Confirm Password" isRequired={true}
+          containToolTip={true} toolTipContent="Confirm password should match password."
+        />
 
-        <button className="btn">Create Account</button>
+        <Button className="btn" content="Create Account" />
 
         <p className="text">
-          Already have an account? <a href="login.html">Login</a>
+          Already have an account? <Link to="/">Login</Link>
           <br />
-          <a href="forgotpassword.html">Forgot Password?</a>
+          <Link to="forgotpassword">Forgot Password?</Link>
         </p>
       </form>
     </main>
-
-    <footer className="page-footer">
-      <p>
-        &copy; <span id="date"></span>
-        <span className="footer-logo"> SiteLogo </span>Built by MBI & SS
-      </p>
-    </footer>
   </>
 );
 

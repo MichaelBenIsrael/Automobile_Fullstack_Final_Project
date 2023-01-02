@@ -1,6 +1,9 @@
 import { React } from "react";
-import { Link } from "react-router-dom";
+import Navbar from "../common/Navbar";
+import { dashBoardLinkList } from "../../assets/links";
 
-const Contact = () => {};
+const Contact = () => {
+    return <Navbar links={dashBoardLinkList} currentActive="Contact Us"/>
+};
 
 export default Contact;

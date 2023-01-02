@@ -1,27 +1,29 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Navbar = () => (
+const Navbar = ({ links, currentActive }) => (
   <nav className="navbar">
     <div className="nav-center">
       <div className="nav-header">
-        <NavLink to="/" exact clNavLinkssName="nav-logo">
+        <NavLink to="/" className="nav-logo">
           SiteLogo
         </NavLink>
+        {links && 
         <button className="btn nav-btn" type="button">
           <i className="fas fa-align-justify"></i>
         </button>
+        }
       </div>
       <div className="nav-links">
-        <NavLink to="/dashboard" className="nav-link">
-          Dashboard
-        </NavLink>
-        <NavLink to="/contactus" className="nav-link active">
-          Contact Us
-        </NavLink>
-        <NavLink to="/about" className="nav-link">
-          About Us
-        </NavLink>
+        {links?.map((link, id) =>
+        {
+          let className = "nav-link";
+          if(link.name === currentActive)
+          {
+            className += " active";
+          }
+          return <NavLink key={id} to={link.url} className={className}>{link.name}</NavLink>
+        })}
       </div>
     </div>
   </nav>
