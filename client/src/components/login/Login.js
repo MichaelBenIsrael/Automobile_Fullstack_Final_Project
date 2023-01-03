@@ -1,43 +1,83 @@
 import { React } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Navbar from "../common/Navbar";
 import Button from "../common/Button";
 import FormControl from "../common/FormControl";
+import { validateEmail, validatePassword } from "../../assets/validations";
+import { getCookie, saveCookie } from "../../assets/cookies";
 
-const Login = () => (
-  <>
-    <Navbar />
+const Login = () => {
 
-    <main className="page">
-      <h1>Login to your account</h1>
-      <form>
-        <FormControl
-          inputType="email" inputId="email" placeHolder="Email Address" isRequired={true}
-          containToolTip={true} toolTipContent="Example: johndoe@gmail.com" />
+  useEffect(() => {
+    document.title = "SiteLogo - Login";
 
-        <FormControl
-          inputType="password" inputId="password" placeHolder="Password" isRequired={true}
-          containToolTip={true} toolTipContent="Password must be atleast 6 characters long.
-        Password must contain:
-        Upper case letter
-        Lower case letter
-        Special character
-        A number."/>
+    // Check cookies for "remember me"
+    const email = getCookie("email");
+    const password = getCookie("password");
 
-        <div style={{ textAlign: "center" }}>
-          <input type="checkbox" name="remember" id="remember" />
-          <span>Remember Me</span>
-        </div>
-        <Button className="btn" content="Login" />
+    if (email && password) {
+      setEmail(email);
+      setPassword(password);
+      SendLoginRequest();
+    }
+    console.log(`${email}, ${password}`)
+  }, []);
 
-        <p className="text">
-          Don't have an account? <Link to="signup">Signup</Link>
-          <br />
-          <Link to="forgotpassword">Forgot Password?</Link>
-        </p>
-      </form>
-    </main>
-  </>
-);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
 
+  const onSubmit = () => {
+    if (validateEmail(email) && validatePassword(password)) {
+      if (remember) {
+        saveCookie("email", email);
+        saveCookie("password", password);
+      }
+      SendLoginRequest();
+    } else {
+      // display modal.
+    }
+  }
+
+  const SendLoginRequest = () => {
+    // post request for login.
+  }
+
+  return (
+    <>
+      <Navbar />
+
+      <main className="page">
+        <h1>Login to your account</h1>
+        <form>
+          <FormControl
+            inputType="email" inputId="email" placeHolder="Email Address" isRequired={true}
+            containToolTip={true} toolTipContent="Example: johndoe@gmail.com" onChangeCallback={setEmail} />
+
+          <FormControl
+            inputType="password" inputId="password" placeHolder="Password" isRequired={true}
+            containToolTip={true} toolTipContent="Password must be atleast 6 characters long.
+          Password must contain:
+          Upper case letter
+          Lower case letter
+          Special character
+          A number." onChangeCallback={setPassword} />
+
+          <div style={{ textAlign: "center" }}>
+            <input type="checkbox" name="remember" id="remember" onChange={(e) => setRemember(e.target.checked)} />
+            <span>Remember Me</span>
+          </div>
+          <Button className="btn" content="Login" onClickCallback={onSubmit} />
+
+          <p className="text">
+            Don't have an account? <NavLink to="/signup">Signup</NavLink>
+            <br />
+            <NavLink to="/forgotpassword">Forgot Password?</NavLink>
+          </p>
+        </form>
+      </main>
+    </>
+  );
+}
 export default Login;

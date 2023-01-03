@@ -250,6 +250,10 @@ Navbar
   color: var(--primary);
 }
 
+.show-links {
+    height: 183px;
+}
+
 /*
 =============== 
 Page
@@ -484,19 +488,12 @@ Table
 }
 
 .pages div {
-  padding: 10px;
-  margin: 0 5px;
-  border: 1px solid #d5d0d0;
-  border-radius: 30%;
   height: 20px;
   width: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--primary);
-  color: var(--white);
-  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
-  font-size: 0.7rem;
+  font-size: .9rem;
   cursor: pointer;
 }
 
