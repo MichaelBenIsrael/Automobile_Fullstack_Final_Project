@@ -8,6 +8,7 @@ import { dashBoardLinkList } from "../../assets/links";
 import { subject } from "../../assets/subjects";
 import FormControl from "../common/FormControl";
 import Button from "../common/Button";
+import Modal from "../common/Modal";
 import Select from "../common/Select";
 import { getCookie } from "../../assets/cookies";
 import { stringNullOrEmpty, validateEmail } from "../../assets/validations";
@@ -16,6 +17,7 @@ const Contact = () => {
 
     const navigate = useNavigate();
     useEffect(() => {
+        document.title = "SiteLogo - Contact Us";
         // check if logged in, if not redirect to login page.
         const sessionId = getCookie("sessionId");
         console.log(sessionId);
@@ -29,11 +31,14 @@ const Contact = () => {
     const [message, setMessage] = useState("");
     const [selectedSubject, setSelectSubject] = useState(0);
 
+    const [modalMessage, setModalMessage] = useState("Please fill all the information on the form, requirement are in the tooltip.");
+    const [showModal, setShowModal] = useState(false);
+
     const submitContactRequest = () => {
         if (!stringNullOrEmpty(fullName) && validateEmail(email) && !stringNullOrEmpty(message) && selectedSubject !== 0) {
             // send request to server
         } else {
-            // display modal.
+            setShowModal(true);
         }
     }
 
@@ -82,6 +87,7 @@ const Contact = () => {
                         </div>
                     </div>
                 </div>
+                {showModal && <Modal errorMessage={modalMessage} setDisplay={setShowModal} />}
             </main>
         </>
     );

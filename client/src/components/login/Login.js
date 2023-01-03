@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../common/Navbar";
 import Button from "../common/Button";
 import FormControl from "../common/FormControl";
+import Modal from "../common/Modal";
 import { validateEmail, validatePassword } from "../../assets/validations";
 import { getCookie, saveCookie } from "../../assets/cookies";
 
@@ -21,12 +22,13 @@ const Login = () => {
       setPassword(password);
       SendLoginRequest();
     }
-    console.log(`${email}, ${password}`)
   }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+  const [modalMessage, setModalMessage] = useState("Please fill the email and password, requirement are in the tooltip.");
+  const [showModal, setShowModal] = useState(false);
 
   const onSubmit = () => {
     if (validateEmail(email) && validatePassword(password)) {
@@ -37,6 +39,7 @@ const Login = () => {
       SendLoginRequest();
     } else {
       // display modal.
+      setShowModal(true);
     }
   }
 
@@ -52,11 +55,11 @@ const Login = () => {
         <h1>Login to your account</h1>
         <form>
           <FormControl
-            inputType="email" inputId="email" placeHolder="Email Address" isRequired={true}
+            inputType="email" inputId="email" placeHolder="Email Address" isRequired={false}
             containToolTip={true} toolTipContent="Example: johndoe@gmail.com" onChangeCallback={setEmail} />
 
           <FormControl
-            inputType="password" inputId="password" placeHolder="Password" isRequired={true}
+            inputType="password" inputId="password" placeHolder="Password" isRequired={false}
             containToolTip={true} toolTipContent="Password must be atleast 6 characters long.
           Password must contain:
           Upper case letter
@@ -76,6 +79,7 @@ const Login = () => {
             <NavLink to="/forgotpassword">Forgot Password?</NavLink>
           </p>
         </form>
+        {showModal && <Modal errorMessage={modalMessage} setDisplay={setShowModal} />}
       </main>
     </>
   );

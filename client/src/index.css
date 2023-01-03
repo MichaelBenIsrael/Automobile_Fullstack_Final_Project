@@ -497,6 +497,7 @@ Table
   cursor: pointer;
 }
 
+
 /* Media query for dashboard table. */
 @media screen and (max-width: 992px) {
   .table-section {
@@ -564,6 +565,43 @@ Table
     content: "Action";
   }
 }
+
+/*
+=============== 
+Modal
+===============
+*/
+.modal{
+  position:fixed;
+  z-index:1;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  overflow:auto;
+  background-color:rgba(0,0,0,0.5);
+}
+
+.modal-content{
+  background-color:var(--white);
+  margin: 20% auto;
+  padding: 20px;
+  width:70%;
+  box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),
+              0 7px 20px 0 rgba(0,0,0,0.17);
+}
+
+.closeBtn{
+  color: var(--bold-grey);
+  float: right;
+  font-size:30px;
+}
+.closeBtn:hover, .closeBtn:focus{
+  color:var(--black);
+  text-decoration: none;
+  cursor: pointer;
+}
+
 
 /* Media query for moblie first design. */
 @media screen and (min-width: 992px) {

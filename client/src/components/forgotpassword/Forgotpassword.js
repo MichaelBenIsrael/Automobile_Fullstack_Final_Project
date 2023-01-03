@@ -1,21 +1,29 @@
 import { React } from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 import { validateEmail } from "../../assets/validations";
 import Button from "../common/Button";
 import FormControl from "../common/FormControl";
 import Navbar from "../common/Navbar";
+import Modal from "../common/Modal";
 
 
 const Forgotpassword = () => {
 
+    useEffect(() => {
+        document.title = "SiteLogo - Forgot Password";
+    }, []);
+
     const [email, setEmail] = useState("");
+
+    const [modalMessage, setModalMessage] = useState("Please fill the email, requirement are in the tooltip.");
+    const [showModal, setShowModal] = useState(false);
 
     const SendForgotPasswordRequest = () => {
         if (validateEmail(email)) {
             // post/get request for password
         } else {
-            // display modal
+            setShowModal(true);
         }
     }
     return (
@@ -35,6 +43,7 @@ const Forgotpassword = () => {
 
                     <p className="text">Don't have an account? <NavLink to="/signup">Signup!</NavLink></p>
                 </form>
+                {showModal && <Modal errorMessage={modalMessage} setDisplay={setShowModal} />}
             </main>
         </>
     )
