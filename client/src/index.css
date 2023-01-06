@@ -584,7 +584,7 @@ Modal
 
 .modal-content{
   background-color:var(--white);
-  margin: 20% auto;
+  margin: 5% auto;
   padding: 20px;
   width:70%;
   box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),
@@ -662,4 +662,8 @@ Modal
   .form-control{
     margin: 20px 0 70px;
   }
+
+    .modal-content {
+      margin: 20% auto;
+    }
 }

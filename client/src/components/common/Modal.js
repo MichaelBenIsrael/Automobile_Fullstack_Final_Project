@@ -17,14 +17,23 @@ const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
 
     const saveTreatment = () => {
         if (validateEmail(workerEmail) && !stringNullOrEmpty(info) && !stringNullOrEmpty(date) && !stringNullOrEmpty(carNumber)) {
+            let number, date;
+            if (treatment) {
+                number = treatment.treatmentNumber;
+                date = treatment.date;
+            } else {
+                number = 2000; // random number, will be assign in the backend.
+                date = new Date().toLocaleString();
+            }
             const newTreatment = {
-                "treatmentNumber": treatment.treatmentNumber,
+                "treatmentNumber": number,
                 "treatmentInfo": info,
                 "date": date,
                 "workerEmail": workerEmail,
                 "carNumber": carNumber
             };
             save(newTreatment);
+            closeModal();
         }
     }
 
@@ -34,13 +43,13 @@ const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
                 <div className="modal-content" >
                     {shouldEdit &&
                         <form style={{ alignItems: "center" }}>
-                            <FormControl inputType="text" inputId="treatmentInfo" content={info} isRequired={false}
-                                containToolTip={false} onChangeCallback={setInfo} />
-                            <FormControl inputType="text" inputId="date" content={date} isRequired={false}
+                            <FormControl inputType="text" inputId="treatmentInfo" placeHolder="Treatment Information"
+                                content={info} isRequired={false} containToolTip={false} onChangeCallback={setInfo} />
+                            <FormControl inputType="text" inputId="date" placeHolder="Treatment Date" content={date} isRequired={false}
                                 containToolTip={false} onChangeCallback={setDate} />
-                            <FormControl inputType="email" inputId="workerEmail" content={workerEmail} isRequired={false}
+                            <FormControl inputType="email" inputId="workerEmail" placeHolder="Worker Email" content={workerEmail} isRequired={false}
                                 containToolTip={false} onChangeCallback={setWorkerEmail} />
-                            <FormControl inputType="text" inputId="carNumber" content={carNumber} isRequired={false}
+                            <FormControl inputType="text" inputId="carNumber" placeHolder="Car Number" content={carNumber} isRequired={false}
                                 containToolTip={false} onChangeCallback={setCarNumber} />
                             <Button className="btn" content="Save" onClickCallback={saveTreatment} />
                         </form>}

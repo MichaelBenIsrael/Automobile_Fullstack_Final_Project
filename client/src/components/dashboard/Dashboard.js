@@ -8,6 +8,7 @@ import Modal from "../common/Modal";
 import { dashBoardLinkList } from "../../assets/links";
 import { getCookie } from "../../assets/cookies";
 import { treatments } from "../../assets/data";
+import Button from "../common/Button";
 
 const Dashboard = () => {
 
@@ -25,6 +26,8 @@ const Dashboard = () => {
 
     const [editTreatment, setEditTreatment] = useState({});
     const [editModal, setEditModal] = useState(false);
+
+    const [newTreatment, setNewTreatment] = useState(false);
 
 
     useEffect(() => {
@@ -66,7 +69,6 @@ const Dashboard = () => {
         filteredRows = [...filteredRows, updatedTreatment];
         setEditTreatment({});
         setTableRows(filteredRows);
-        setEditModal(false);
         // send request to update the server.
     }
 
@@ -124,6 +126,10 @@ const Dashboard = () => {
         setTableRows([...sortedRows]);
     }
 
+    const addNewTreatment = (treatment) => {
+        treatment.treatmentNumber = tableRows.length + 1;
+        setTableRows([...tableRows, treatment]);
+    }
     return (
         <>
             <Navbar links={dashBoardLinkList} currentActive="Dashboard" />
@@ -178,7 +184,9 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
+                <Button className="btn" content="Add New Treatment" onClickCallback={() => setNewTreatment(true)} />
                 {editModal && <Modal shouldEdit={true} setDisplay={setEditModal} treatment={editTreatment} save={saveEdit} updateTreatment={setEditTreatment} />}
+                {newTreatment && <Modal shouldEdit={true} setDisplay={setNewTreatment} save={addNewTreatment} />}
             </main>
 
         </>
