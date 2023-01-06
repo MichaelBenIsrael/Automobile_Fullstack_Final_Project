@@ -29,6 +29,14 @@ const Dashboard = () => {
 
     const [newTreatment, setNewTreatment] = useState(false);
 
+    const [directions, setDirections] = useState({
+        "number": true,
+        "info": true,
+        "date": true,
+        "email": true,
+        "carNumber": true
+    });
+
 
     useEffect(() => {
         document.title = "SiteLogo - Dashboard";
@@ -73,56 +81,120 @@ const Dashboard = () => {
     }
 
     const sortByNumber = () => {
-        const sortedRows = tableRows.sort((row1, row2) => {
-            if (row1.treatmentNumber < row2.treatmentNumber) {
-                return -1;
+        let sortFunc;
+        if (directions.number) {
+            sortFunc = (row1, row2) => {
+                if (row1.treatmentNumber < row2.treatmentNumber) {
+                    return -1;
+                }
+                if (row1.treatmentNumber > row2.treatmentNumber) {
+                    return 1;
+                }
+                return 0;
             }
-            if (row1.treatmentNumber > row2.treatmentNumber) {
-                return 1;
+        } else {
+            sortFunc = (row1, row2) => {
+                if (row1.treatmentNumber > row2.treatmentNumber) {
+                    return -1;
+                }
+                if (row1.treatmentNumber < row2.treatmentNumber) {
+                    return 1;
+                }
+                return 0;
             }
-            return 0;
-        });
+        }
+        const sortedRows = tableRows.sort(sortFunc);
+        setDirections({ ...directions, "number": !directions.number });
         setTableRows([...sortedRows]);
     }
 
     const sortByInfo = () => {
-        const sortedRows = tableRows.sort((row1, row2) => {
-            return row1.treatmentInfo.localeCompare(row2.treatmentInfo);
-        });
+        let sortFunc;
+        if (directions.info) {
+            sortFunc = (row1, row2) => {
+                return row1.treatmentInfo.localeCompare(row2.treatmentInfo);
+            }
+        } else {
+            sortFunc = (row1, row2) => {
+                return row2.treatmentInfo.localeCompare(row1.treatmentInfo);
+            }
+        }
+        const sortedRows = tableRows.sort(sortFunc);
+        setDirections({ ...directions, "info": !directions.info });
         setTableRows([...sortedRows]);
     }
 
     const sortByDate = () => {
-        const sortedRows = tableRows.sort((row1, row2) => {
-            const date1 = new Date(row1.date), date2 = new Date(row2.date);
-            if (date1 < date2) {
-                return -1;
+        let sortFunc;
+        if (directions.date) {
+            sortFunc = (row1, row2) => {
+                const date1 = new Date(row1.date), date2 = new Date(row2.date);
+                if (date1 < date2) {
+                    return -1;
+                }
+                if (date1 > date2) {
+                    return 1;
+                }
+                return 0;
             }
-            if (date1 > date2) {
-                return 1;
+        } else {
+            sortFunc = (row1, row2) => {
+                const date1 = new Date(row1.date), date2 = new Date(row2.date);
+                if (date1 > date2) {
+                    return -1;
+                }
+                if (date1 < date2) {
+                    return 1;
+                }
+                return 0;
             }
-            return 0;
-        });
+        }
+        const sortedRows = tableRows.sort(sortFunc);
+        setDirections({ ...directions, "date": !directions.date });
         setTableRows([...sortedRows]);
     }
 
     const sortByEmail = () => {
-        const sortedRows = tableRows.sort((row1, row2) => {
-            return row1.workerEmail.localeCompare(row2.workerEmail);
-        });
+        let sortFunc;
+        if (directions.email) {
+            sortFunc = (row1, row2) => {
+                return row1.workerEmail.localeCompare(row2.workerEmail);
+            }
+        } else {
+            sortFunc = (row1, row2) => {
+                return row2.workerEmail.localeCompare(row1.workerEmail);
+            }
+        }
+        const sortedRows = tableRows.sort(sortFunc);
+        setDirections({ ...directions, "email": !directions.email });
         setTableRows([...sortedRows]);
     }
 
     const sortByCarNumber = () => {
-        const sortedRows = tableRows.sort((row1, row2) => {
-            if (row1.carNumber < row2.carNumber) {
-                return -1;
+        let sortFunc;
+        if (directions.carNumber) {
+            sortFunc = (row1, row2) => {
+                if (row1.carNumber < row2.carNumber) {
+                    return -1;
+                }
+                if (row1.carNumber > row2.carNumber) {
+                    return 1;
+                }
+                return 0;
             }
-            if (row1.carNumber > row2.carNumber) {
-                return 1;
+        } else {
+            sortFunc = (row1, row2) => {
+                if (row1.carNumber > row2.carNumber) {
+                    return -1;
+                }
+                if (row1.carNumber < row2.carNumber) {
+                    return 1;
+                }
+                return 0;
             }
-            return 0;
-        });
+        }
+        const sortedRows = tableRows.sort(sortFunc);
+        setDirections({ ...directions, "carNumber": !directions.carNumber });
         setTableRows([...sortedRows]);
     }
 
