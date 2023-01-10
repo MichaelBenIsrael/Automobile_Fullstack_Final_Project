@@ -41,7 +41,7 @@ const Forgotpassword = () => {
 
                     <Button className="btn" content="Send Password" onClickCallback={SendForgotPasswordRequest} />
 
-                    <p className="text">Don't have an account? <NavLink to="/signup">Signup!</NavLink></p>
+                    <p className="text">Don't have an account? <NavLink to="/signup">Signup</NavLink></p>
                 </form>
                 {showModal && <Modal errorMessage={modalMessage} setDisplay={setShowModal} />}
             </main>

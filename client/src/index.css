@@ -135,6 +135,7 @@ textarea {
   font-size: 16px;
   border: 1px var(--primary) solid;
   border-radius: 5px;
+  transition: all ease-in-out .3s;
 }
 
 .btn:active {
@@ -311,7 +312,7 @@ form {
 .form-control {
   position: relative;
   margin: 20px 0 30px;
-  width: 300px;
+  width: inherit;
 }
 
 .form-control input {
