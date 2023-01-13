@@ -221,11 +221,9 @@ const Dashboard = () => {
                         <div>
                             <input placeholder="Search" />
                         </div>
-                        <div>
-                            <Button className="btn nav-btn"
-                                content={<BiCog style={{ verticalAlign: "middle", height: "30px" }} />}
-                                onClickCallback={() => showFiltersOptions()} />
-                        </div>
+                        <Button className="btn nav-btn"
+                            content={<BiCog style={{ verticalAlign: "middle", height: "30px" }} />}
+                            onClickCallback={() => showFiltersOptions()} />
                     </div>
                     <div className="filter-options">
                         {filters.map((filter, id) => {
