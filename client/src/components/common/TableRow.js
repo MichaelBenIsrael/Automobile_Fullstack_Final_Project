@@ -6,7 +6,7 @@ const TableRow = ({ treatment, editCallback, deleteCallback }) => {
         <tr>
             <td>{treatment.treatmentNumber}</td>
             <td>{treatment.treatmentInfo}</td>
-            <td>{treatment.date}</td>
+            <td>{treatment.date.toLocaleString()}</td>
             <td>{treatment.workerEmail}</td>
             <td>{treatment.carNumber}</td>
             <td>

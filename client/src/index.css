@@ -125,7 +125,7 @@ textarea {
   border-radius: 5px;
 }
 
-.btn {
+.btn, .table .btn {
   color: var(--primary);
   display: inline-block;
   cursor: pointer;
@@ -138,16 +138,16 @@ textarea {
   transition: all ease-in-out .3s;
 }
 
-.btn:active {
+.btn:active, .table .btn:active {
   transform: scale(0.98);
 }
 
-.btn:hover {
+.btn:hover, .table .btn:hover {
   color: var(--background);
   background: var(--primary);
 }
 
-.btn:focus {
+.btn:focus, .table .btn:focus {
   outline: none;
 }
 
@@ -251,10 +251,6 @@ Navbar
   color: var(--primary);
 }
 
-.show-links {
-    height: 183px;
-}
-
 /*
 =============== 
 Page
@@ -341,6 +337,7 @@ textarea:focus {
 .form-control .tooltip .tooltiptext {
   position: absolute;
   top: -10px;
+  left: -30px;
   background-color: var(--text-color);
   color: var(--white);
   visibility: hidden;
@@ -475,6 +472,30 @@ Table
   background-color: var(--red);
 }
 
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  height: 0;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.filter-option {
+  display: block;
+  text-align: center;
+  text-transform: capitalize;
+  color: var(--bold-grey);
+  letter-spacing: 1px;
+  padding: 0.2rem 0;
+  border-top: 1px solid var(--light-grey);
+  cursor:pointer;
+  transition: var(--transition);
+}
+.filter-option:hover{
+  color: var(--primary);
+  text-decoration: underline;
+}
+
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -603,10 +624,13 @@ Modal
   cursor: pointer;
 }
 
+.show-links {
+  height: 183px;
+}
 
 /* Media query for moblie first design. */
 @media screen and (min-width: 992px) {
-  .nav-btn {
+  .nav-btn, .table .nav-btn {
     display: none;
   }
 
@@ -629,6 +653,10 @@ Modal
     flex-direction: row;
     align-items: center;
     width: 100%;
+  }
+
+  .filter-options{
+    height:0;
   }
 
   .nav-link {

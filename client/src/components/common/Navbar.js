@@ -1,6 +1,7 @@
 import { React } from "react";
 import { NavLink } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
+import Button from "./Button";
 
 const Navbar = ({ links, currentActive }) => {
     const showNav = () => {
@@ -15,9 +16,8 @@ const Navbar = ({ links, currentActive }) => {
                         SiteLogo
                     </NavLink>
                     {links &&
-                        <button className="btn nav-btn" type="button" onClick={() => showNav()}>
-                            <GiHamburgerMenu style={{ verticalAlign: "middle", height: "30px" }} />
-                        </button>
+                        <Button className="btn nav-btn" content={<GiHamburgerMenu style={{ verticalAlign: "middle", height: "30px" }} />}
+                            onClickCallback={showNav} />
                     }
                 </div>
                 <div className="nav-links">
