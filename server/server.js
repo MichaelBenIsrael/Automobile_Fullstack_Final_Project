@@ -1,5 +1,5 @@
 // import dotenv in order to use environmetal variables
-require('dotenv').config()      
+require('dotenv').config()
 
 const express = require('express')
 const app = express()
@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 
 
 mongoose.set("strictQuery", false)
-mongoose.connect(process.env.DATABASE_URL,  { useNewUrlParser: true});
+mongoose.connect("mongodb+srv://shaked:Jr0karZjxP4veE0d@snm-garage.pjfjf0z.mongodb.net/SnM-Garage?retryWrites=true&w=majority", { useNewUrlParser: true });
 
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
@@ -20,5 +20,5 @@ app.use('/treatments', treatmentsRouter)                  //url: localhost:3000/
 
 
 
-
+console.clear();
 app.listen(3000, () => console.log('Server Started'))
