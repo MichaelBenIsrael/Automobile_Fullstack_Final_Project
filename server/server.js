@@ -15,8 +15,8 @@ db.once('open', () => console.log('Connected to Database'))
 
 app.use(express.json())
 
-const treatmentsRouter = require('./routes/treatments')
-app.use('/treatments', treatmentsRouter)                  //url: localhost:3000//treatments - anything that has this url or anythong after we go to our routes folder
+const treatmentsRouter = require('./routes/api')
+app.use('/api', treatmentsRouter)                  //url: localhost:3000//treatments - anything that has this url or anythong after we go to our routes folder
 
 
 

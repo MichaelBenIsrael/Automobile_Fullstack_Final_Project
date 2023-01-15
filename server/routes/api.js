@@ -164,6 +164,25 @@ router.get('/dashboard/:mail', async (req, res) => {
     }
 })
 
+router.get('/dashboard', async (req, res) => {
+    const treatments = await Treatment.find();
+    let tempData;
+    if (req.query.search !== 'undefined') {
+        const searchQuery = req.query.search.toLowerCase();
+        tempData = treatments.filter((treatment) => {
+            return treatment.treatmentInformation.toLowerCase().includes(searchQuery);
+        });
+    } else {
+        tempData = treatments;
+    }
+    const page = isNaN(req.query.page) || req.query.page !== ' ' ? 1 : req.query.page;
+    console.log(page);
+    const startIndex = (page - 1) * 10;
+    const endIndex = page * 10;
+    const paginatedTreatments = tempData.slice(startIndex, endIndex);
+    res.json(paginatedTreatments);
+});
+
 
 
 // request to Create a new treatment
