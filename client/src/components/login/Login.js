@@ -12,20 +12,6 @@ import { ServerAPI } from "../../assets/api";
 
 const Login = () => {
 
-  useEffect(() => {
-    document.title = `${siteName} - Login`;
-
-    // Check cookies for "remember me"
-    const email = getCookie("email");
-    const password = getCookie("password");
-
-    if (email && password) {
-      setUserEmail(email);
-      setUserPassword(password);
-      onSubmit();
-    }
-  }, []);
-
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -67,6 +53,20 @@ const Login = () => {
     const resData = await res.json();
     return resData;
   }
+
+  useEffect(() => {
+    document.title = `${siteName} - Login`;
+
+    // Check cookies for "remember me"
+    const email = getCookie("email");
+    const password = getCookie("password");
+
+    if (email && password) {
+      setUserEmail(email);
+      setUserPassword(password);
+      onSubmit();
+    }
+  }, []);
 
   return (
     <>
