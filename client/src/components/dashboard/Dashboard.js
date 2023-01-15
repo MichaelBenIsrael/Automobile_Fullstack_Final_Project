@@ -1,24 +1,25 @@
 import { React } from "react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight } from 'react-icons/bs';
+import { NavLink, useNavigate } from "react-router-dom";
+import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight } from "react-icons/bs";
+import { BiCog } from "react-icons/bi";
 import Navbar from "../common/Navbar";
 import TableRow from "../common/TableRow";
 import Modal from "../common/Modal";
-import { dashBoardLinkList } from "../../assets/links";
+import { dashBoardLinkList, filters } from "../../assets/links";
 import { getCookie } from "../../assets/cookies";
 import { treatments } from "../../assets/data";
 import Button from "../common/Button";
 
 const Dashboard = () => {
 
-    const navigate = useNavigate();
-    useEffect(() => {
-        const sessionId = getCookie("sessionId");
-        if (!sessionId) {
-            navigate('/');
-        }
-    }, [navigate]);
+    // const navigate = useNavigate();
+    // useEffect(() => {
+    //     const sessionId = getCookie("sessionId");
+    //     if (!sessionId) {
+    //         navigate('/');
+    //     }
+    // }, [navigate]);
 
     const [tableRows, setTableRows] = useState(treatments);
     const [pageNumber, setPageNumber] = useState(1);
@@ -36,6 +37,8 @@ const Dashboard = () => {
         "email": true,
         "carNumber": true
     });
+
+    const [showFilters, setShowFilters] = useState(false);
 
 
     useEffect(() => {
@@ -114,7 +117,7 @@ const Dashboard = () => {
         setTableRows([...sortedRows]);
     }
 
-    const sortByInfo = () => {
+    const sortByInformation = () => {
         let sortFunc;
         if (directions.info) {
             sortFunc = (row1, row2) => {
@@ -176,7 +179,7 @@ const Dashboard = () => {
         setTableRows([...sortedRows]);
     }
 
-    const sortByCarNumber = () => {
+    const sortByCar = () => {
         let sortFunc;
         if (directions.carNumber) {
             sortFunc = (row1, row2) => {
@@ -208,6 +211,11 @@ const Dashboard = () => {
         treatment.treatmentNumber = tableRows.length + 1;
         setTableRows([...tableRows, treatment]);
     }
+
+    const showFiltersOptions = () => {
+        document.querySelector('.filter-options').classList.toggle('show-links');
+    }
+
     return (
         <>
             <Navbar links={dashBoardLinkList} currentActive="Dashboard" />
@@ -219,16 +227,25 @@ const Dashboard = () => {
                         <div>
                             <input placeholder="Search" />
                         </div>
+                        <Button className="btn nav-btn"
+                            content={<BiCog style={{ verticalAlign: "middle", height: "30px" }} />}
+                            onClickCallback={() => showFiltersOptions()} />
+                    </div>
+                    <div className="filter-options">
+                        {filters.map((filter, id) => {
+                            const callBackName = `sortBy${filter.name.split(' ')[2]}()`;
+                            return <div onClick={(e) => eval(callBackName)} key={id} className="filter-option">{filter.name}</div>
+                        })}
                     </div>
                     <div className="table-section">
                         <table>
                             <thead>
                                 <tr>
                                     <th onClick={() => sortByNumber()}>Treatment Number</th>
-                                    <th onClick={() => sortByInfo()}>Treatment Information</th>
+                                    <th onClick={() => sortByInformation()}>Treatment Information</th>
                                     <th onClick={() => sortByDate()}>Date</th>
                                     <th onClick={() => sortByEmail()}>Worker email</th>
-                                    <th onClick={() => sortByCarNumber()}>Car Number</th>
+                                    <th onClick={() => sortByCar()}>Car Number</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

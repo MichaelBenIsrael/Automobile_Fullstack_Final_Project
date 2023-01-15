@@ -13,3 +13,21 @@ export const dashBoardLinkList = [
     }
 ];
 
+export const filters = [
+    {
+        "name": "Sort by Number"
+    },
+    {
+        "name": "Sort by Information"
+    },
+    {
+        "name": "Sort by Date"
+    },
+    {
+        "name": "Sort by Email"
+    },
+    {
+        "name": "Sort by Car Number"
+    },
+]
+
