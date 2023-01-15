@@ -5,7 +5,7 @@ const TableRow = ({ treatment, editCallback, deleteCallback }) => {
     return (
         <tr>
             <td>{treatment.treatmentNumber}</td>
-            <td>{treatment.treatmentInfo}</td>
+            <td>{treatment.treatmentInformation}</td>
             <td>{treatment.date.toLocaleString()}</td>
             <td>{treatment.workerEmail}</td>
             <td>{treatment.carNumber}</td>

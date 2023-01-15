@@ -7,6 +7,7 @@ import FormControl from "../common/FormControl";
 import Navbar from "../common/Navbar";
 import Modal from "../common/Modal";
 import { siteName } from "../../assets/const";
+import { ServerAPI } from "../../assets/api";
 
 
 const Forgotpassword = () => {
@@ -15,15 +16,30 @@ const Forgotpassword = () => {
         document.title = `${siteName} - Forgot Password`;
     }, []);
 
-    const [email, setEmail] = useState("");
+    const [userEmail, setUserEmail] = useState("");
 
     const [modalMessage, setModalMessage] = useState("Please fill the email, requirement are in the tooltip.");
     const [showModal, setShowModal] = useState(false);
 
-    const SendForgotPasswordRequest = () => {
-        if (validateEmail(email)) {
-            // post/get request for password
+    const SendForgotPasswordRequest = async () => {
+        if (validateEmail(userEmail)) {
+            const res = await fetch(`${ServerAPI}/forgetpassword`, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: userEmail }),
+            });
+            const resData = await res.json();
+            if (resData.message === 'True') {
+                setModalMessage("We have sent your password, please check your email.");
+            } else {
+                setModalMessage("Failed to send your password. Please try again in a few minutes.");
+            }
+            setShowModal(true);
         } else {
+            setModalMessage("Please fill the email, requirement are in the tooltip.");
             setShowModal(true);
         }
     }
@@ -38,7 +54,7 @@ const Forgotpassword = () => {
                     <FormControl
                         inputType="email" inputId="email" placeHolder="Email Adress" isRequired={true}
                         containToolTip={true} toolTipContent="Enter the email assosiated with your account to reset your password.
-                                    Example: johndoe@gmail.com" onChangeCallback={setEmail} />
+                                    Example: johndoe@gmail.com" onChangeCallback={setUserEmail} />
 
                     <Button className="btn" content="Send Password" onClickCallback={SendForgotPasswordRequest} />
 
