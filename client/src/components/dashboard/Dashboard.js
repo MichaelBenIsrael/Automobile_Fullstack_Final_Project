@@ -38,8 +38,6 @@ const Dashboard = () => {
         "carNumber": true
     });
 
-    const [showFilters, setShowFilters] = useState(false);
-
 
     useEffect(() => {
         document.title = "SiteLogo - Dashboard";
@@ -234,7 +232,7 @@ const Dashboard = () => {
                     <div className="filter-options">
                         {filters.map((filter, id) => {
                             const callBackName = `sortBy${filter.name.split(' ')[2]}()`;
-                            return <div onClick={(e) => eval(callBackName)} key={id} className="filter-option">{filter.name}</div>
+                            return <div onClick={(e) => { eval(callBackName); showFiltersOptions(); }} key={id} className="filter-option">{filter.name}</div>
                         })}
                     </div>
                     <div className="table-section">
