@@ -11,20 +11,24 @@ import { getCookie } from "../../assets/cookies";
 import { treatments } from "../../assets/data";
 import Button from "../common/Button";
 import { siteName } from "../../assets/const";
+import { ServerAPI } from "../../assets/api";
 
 const Dashboard = () => {
 
-    // const navigate = useNavigate();
-    // useEffect(() => {
-    //     const sessionId = getCookie("sessionId");
-    //     if (!sessionId) {
-    //         navigate('/');
-    //     }
-    // }, [navigate]);
+    const navigate = useNavigate();
+    useEffect(() => {
+        const sessionId = getCookie("sessionId");
+        if (!sessionId) {
+            navigate('/');
+        }
+    }, [navigate]);
 
-    const [tableRows, setTableRows] = useState(treatments);
+    const [tableRows, setTableRows] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
-    const [totalRows, setTotalRows] = useState(treatments.length);
+    const [totalRows, setTotalRows] = useState(0);
+    const [searchParam, setSearchParam] = useState("");
+
+    const [loading, setLoading] = useState(false);
 
     const [editTreatment, setEditTreatment] = useState({});
     const [editModal, setEditModal] = useState(false);
@@ -43,21 +47,47 @@ const Dashboard = () => {
     useEffect(() => {
         document.title = `${siteName} - Dashboard`;
         // fetch data from server
+        getTableRows()
         getTotalRows();
-        getTableRows();
     }, []);
+
 
     const getTableRows = async () => {
         // request from server rows of pageNumber
-        const data = await fetch("", {});
-        const rows = await data.json();
+        setLoading(true);
+        const res = await fetch(`${ServerAPI}/dashboard/${getCookie("sessionId")}/?page=${pageNumber}&search=${searchParam}`, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        const rows = await res.json();
         setTableRows(rows);
+        if (!directions.number) {
+            sortByNumber();
+        } else if (!directions.email) {
+            sortByEmail();
+        } else if (!directions.date) {
+            sortByDate();
+        } else if (!directions.info) {
+            sortByInformation();
+        } else if (!directions.carNumber) {
+            sortByCar();
+        }
+        setLoading(false);
     };
 
     const getTotalRows = async () => {
         // request server for total number rows
-        const data = await fetch("", {});
-        const rows = await data.json();
+        const res = await fetch(`${ServerAPI}/dashboard/gettotal/${getCookie("sessionId")}`, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        const rows = await res.json();
         setTotalRows(rows);
     };
 
@@ -85,7 +115,6 @@ const Dashboard = () => {
         });
         setEditTreatment({});
         setTableRows([...tableRows]);
-        // send request to update the server.
     }
 
     const sortByNumber = () => {
@@ -206,9 +235,19 @@ const Dashboard = () => {
         setTableRows([...sortedRows]);
     }
 
-    const addNewTreatment = (treatment) => {
-        treatment.treatmentNumber = tableRows.length + 1;
-        setTableRows([...tableRows, treatment]);
+    const addNewTreatment = async (treatment) => {
+        // request from server rows of pageNumber
+        const res = await fetch(`${ServerAPI}/dashboard/createTreatment`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...treatment, sessionId: getCookie("sessionId") })
+        });
+        const rows = await res.json();
+        await getTableRows();
+        await getTotalRows();
     }
 
     const showFiltersOptions = () => {
@@ -224,7 +263,10 @@ const Dashboard = () => {
                     <div className="table-header">
                         <span>Treatments Details</span>
                         <div>
-                            <input placeholder="Search" />
+                            <input placeholder="Search" onChange={async (e) => {
+                                setSearchParam(e.target.value);
+                                await getTableRows();
+                            }} />
                         </div>
                         <Button className="btn nav-btn"
                             content={<BiCog style={{ verticalAlign: "middle", height: "30px" }} />}
@@ -249,7 +291,7 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {tableRows.map((row, id) => {
+                                {tableRows?.map((row, id) => {
                                     return <TableRow treatment={row} editCallback={editRow} deleteCallback={deleteRow} key={id} />
                                 })}
                             </tbody>

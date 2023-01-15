@@ -7,10 +7,6 @@ export const dashBoardLinkList = [
         "name": "Contact Us",
         "url": "/contact"
     },
-    {
-        "name": "About Us",
-        "url": "/about"
-    }
 ];
 
 export const filters = [

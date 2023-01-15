@@ -22,12 +22,20 @@ router.post('/login', async (req, res) => {
 
     try {
         const all_users = await User.find();
-        user = all_users.filter(x => x.email == req.body.email);
-        password = user.filter(x => x.password == req.body.password);
-        if (password.length == 0) {
-            return res.status(400).json({ message: 'False' });
+        user = all_users.find((x) => x.email === req.body.email);
+        if (user === null || user === undefined) {
+            return res.status(400).json({ message: 'Email doesn`t exists.' });
         }
-        return res.json({ message: 'True' });
+        if (user.password !== req.body.password) {
+            return res.status(400).json({ message: 'Password doesn`t match.' });
+        }
+        const session = (Math.random() + 1).toString(36).substring(7);
+
+        var myquery = { email: user.email };
+        var newvalues = { $set: { sessionId: session } };
+        const options = { upsert: true };
+        await User.updateOne(myquery, newvalues, options);
+        return res.json({ sessionId: session });
 
     } catch (err) {
         return res.status(500).json({ message: err.message });
@@ -41,6 +49,7 @@ router.post('/signup', async (req, res) => {
     const new_user = new User({
         email: req.body.email,
         password: req.body.password,
+        sessionId: "-1",
     });
 
     try {
@@ -152,31 +161,35 @@ router.post('/contact-us', async (req, res) => {
 
 
 // request to get all user treatments
-router.get('/dashboard/:mail', async (req, res) => {
+router.get('/dashboard/gettotal/:sessionId', async (req, res) => {
     var user_treatments;
 
     try {
+        const users = await User.find();
+        const user = users.find((x) => x.sessionId === req.params.sessionId);
         const treatments = await Treatment.find();
-        user_treatments = treatments.filter(x => x.workerEmail == req.params.mail);
-        res.json(user_treatments);
+        user_treatments = treatments.filter(x => x.workerEmail === user.email);
+        res.json(user_treatments.length);
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
 })
 
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard/:sessionId', async (req, res) => {
+    const users = await User.find();
+    const user = users.find(x => x.sessionId == req.params.sessionId);
     const treatments = await Treatment.find();
+    const userTreatments = treatments.filter((treatment) => treatment.workerEmail === user.email);
     let tempData;
-    if (req.query.search !== 'undefined') {
+    if (req.query.search) {
         const searchQuery = req.query.search.toLowerCase();
-        tempData = treatments.filter((treatment) => {
+        tempData = userTreatments.filter((treatment) => {
             return treatment.treatmentInformation.toLowerCase().includes(searchQuery);
         });
     } else {
-        tempData = treatments;
+        tempData = userTreatments;
     }
     const page = isNaN(req.query.page) || req.query.page !== ' ' ? 1 : req.query.page;
-    console.log(page);
     const startIndex = (page - 1) * 10;
     const endIndex = page * 10;
     const paginatedTreatments = tempData.slice(startIndex, endIndex);
@@ -187,14 +200,13 @@ router.get('/dashboard', async (req, res) => {
 
 // request to Create a new treatment
 router.post('/dashboard/createTreatment', async (req, res) => {
-    var user;
-    var input_mail = req.body.workerEmail;
+    var sessionId = req.body.sessionId;
 
     const users = await User.find();
 
     // validate the given e-mail is a signed user
-    user = users.filter(x => x.email == input_mail)
-    if (user.length == 0) {
+    const user = users.find(x => x.sessionId === sessionId)
+    if (user === null || user === undefined) {
         return res.status(400).json({ message: 'Unable to find user' })
     }
 
@@ -223,8 +235,7 @@ router.post('/dashboard/createTreatment', async (req, res) => {
 
     try {
         const newTreatment = await treatment.save();
-        process.env.treatmentNum = parseInt(70) + 1;
-        res.status(201).json(newTreatment);
+        res.status(200).json({ message: "True" });
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

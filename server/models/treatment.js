@@ -3,58 +3,62 @@ const mongoose = require('mongoose')
 
 
 const treatmentSchema = {
- 
-treatmentNumber:{
-    type: String,
-    required: true
-},
-treatmentInformation:{
-    type: String,
-    required: true
-},
-date:{
-    type: Date,
-    required: true,
-    default: (new Date()).toLocaleDateString('en-US')//dateFormat(new Date())
-},
-workerEmail:{
-    type: String,
-    required: true
-},
-carNumber:{
-    type: String,
-    required: true
-}
+
+    treatmentNumber: {
+        type: String,
+        required: true
+    },
+    treatmentInformation: {
+        type: String,
+        required: true
+    },
+    date: {
+        type: Date,
+        required: true,
+        default: (new Date()).toLocaleDateString('en-US')//dateFormat(new Date())
+    },
+    workerEmail: {
+        type: String,
+        required: true
+    },
+    carNumber: {
+        type: String,
+        required: true
+    }
 }
 
 
 const userSchema = new mongoose.Schema({
- 
-    email:{
+
+    email: {
         type: String,
         required: true
     },
-    password:{
+    password: {
         type: String,
         required: true
-    }
+    },
+    sessionId: {
+        type: String,
+        required: true
+    },
 })
 
 
 const contactSchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    email:{
+    email: {
         type: String,
         required: true
     },
-    concern:{
+    concern: {
         type: String,
         required: true
     },
-    subject:{
+    subject: {
         type: String,
         required: true
     }
@@ -64,4 +68,4 @@ const contactSchema = new mongoose.Schema({
 const Treatment = mongoose.model('Treatment', treatmentSchema)
 const User = mongoose.model('User', userSchema)
 const Contact = mongoose.model('Contact', contactSchema)
-module.exports = {Treatment, User, Contact}
+module.exports = { Treatment, User, Contact }

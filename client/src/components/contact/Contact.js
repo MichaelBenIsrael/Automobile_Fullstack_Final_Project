@@ -13,6 +13,7 @@ import Select from "../common/Select";
 import { getCookie } from "../../assets/cookies";
 import { stringNullOrEmpty, validateEmail } from "../../assets/validations";
 import { siteName } from "../../assets/const";
+import { ServerAPI } from "../../assets/api";
 
 const Contact = () => {
 
@@ -28,17 +29,40 @@ const Contact = () => {
     }, [navigate]);
 
     const [fullName, setFullName] = useState("");
-    const [email, setEmail] = useState("");
+    const [userEmail, setUserEmail] = useState("");
     const [message, setMessage] = useState("");
     const [selectedSubject, setSelectSubject] = useState(0);
 
     const [modalMessage, setModalMessage] = useState("Please fill all the information on the form, requirement are in the tooltip.");
     const [showModal, setShowModal] = useState(false);
 
-    const submitContactRequest = () => {
-        if (!stringNullOrEmpty(fullName) && validateEmail(email) && !stringNullOrEmpty(message) && selectedSubject !== 0) {
-            // send request to server
+    const submitContactRequest = async () => {
+        if (!stringNullOrEmpty(fullName) && validateEmail(userEmail) && !stringNullOrEmpty(message) && selectedSubject !== 0) {
+            const subject = document.getElementById("subject");
+            const innerText = subject.options[subject.selectedIndex].text;
+            const data = {
+                name: fullName,
+                email: userEmail,
+                concern: innerText,
+                subject: message,
+            };
+            const res = await fetch(`${ServerAPI}/contact-us`, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            });
+            const resData = await res.json();
+            if (resData.message === "True") {
+                setModalMessage("Message was received, we will do our best to address the issue!");
+            } else {
+                setModalMessage("Failed to send the message. Please try again in a few minutes.");
+            }
+            setShowModal(true);
         } else {
+            setModalMessage("Please fill all the information on the form, requirement are in the tooltip.");
             setShowModal(true);
         }
     }
@@ -59,7 +83,7 @@ const Contact = () => {
 
                             <FormControl
                                 inputType="email" inputId="email" placeHolder="Email Address" isRequired={true}
-                                containToolTip={true} toolTipContent="Example: johndoe@gmail.com" onChangeCallback={setEmail} />
+                                containToolTip={true} toolTipContent="Example: johndoe@gmail.com" onChangeCallback={setUserEmail} />
 
                             <Select subjects={subject} onChangeCallback={setSelectSubject} />
 

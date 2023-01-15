@@ -6,10 +6,10 @@ import { stringNullOrEmpty, validateEmail } from "../../assets/validations";
 
 const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
 
-    const [info, setInfo] = useState(treatment?.treatmentInfo);
-    const [date, setDate] = useState(treatment?.date);
-    const [workerEmail, setWorkerEmail] = useState(treatment?.workerEmail);
-    const [carNumber, setCarNumber] = useState(treatment?.carNumber);
+    const [info, setInfo] = useState(treatment ? treatment.treatmentInformation : "");
+    const [date, setDate] = useState(treatment ? treatment.date : new Date());
+    const [workerEmail, setWorkerEmail] = useState(treatment ? treatment.workerEmail : "");
+    const [carNumber, setCarNumber] = useState(treatment ? treatment.carNumber : "");
 
     const closeModal = () => {
         setDisplay(false);
@@ -27,7 +27,7 @@ const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
             }
             const newTreatment = {
                 "treatmentNumber": number,
-                "treatmentInfo": info,
+                "treatmentInformation": info,
                 "date": date,
                 "workerEmail": workerEmail,
                 "carNumber": carNumber
@@ -43,9 +43,9 @@ const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
                 <div className="modal-content" >
                     {shouldEdit &&
                         <form style={{ alignItems: "center" }}>
-                            <FormControl inputType="text" inputId="treatmentInfo" placeHolder="Treatment Information"
+                            <FormControl inputType="text" inputId="treatmentInformation" placeHolder="Treatment Information"
                                 content={info} isRequired={false} containToolTip={false} onChangeCallback={setInfo} />
-                            <FormControl inputType="date" inputId="date" placeHolder="Treatment Date" content={date ? date : new Date()}
+                            <FormControl inputType="date" inputId="date" placeHolder="Treatment Date" content={date}
                                 isDate={true} isRequired={false} containToolTip={false} onChangeCallback={setDate} />
                             <FormControl inputType="email" inputId="workerEmail" placeHolder="Worker Email" content={workerEmail} isRequired={false}
                                 containToolTip={false} onChangeCallback={setWorkerEmail} />
