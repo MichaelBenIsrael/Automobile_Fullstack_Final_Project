@@ -6,11 +6,12 @@ import Button from "../common/Button";
 import FormControl from "../common/FormControl";
 import Modal from "../common/Modal";
 import { validateEmail, validatePassword } from "../../assets/validations";
+import { siteName } from "../../assets/const";
 
 const Signup = () => {
 
   useEffect(() => {
-    document.title = "SiteLogo - Sign up";
+    document.title = `${siteName} - Sign up`;
   }, []);
 
   const [email, setEmail] = useState("");

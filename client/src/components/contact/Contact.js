@@ -12,12 +12,13 @@ import Modal from "../common/Modal";
 import Select from "../common/Select";
 import { getCookie } from "../../assets/cookies";
 import { stringNullOrEmpty, validateEmail } from "../../assets/validations";
+import { siteName } from "../../assets/const";
 
 const Contact = () => {
 
     const navigate = useNavigate();
     useEffect(() => {
-        document.title = "SiteLogo - Contact Us";
+        document.title = `${siteName} - Contact Us`;
         // check if logged in, if not redirect to login page.
         const sessionId = getCookie("sessionId");
         console.log(sessionId);

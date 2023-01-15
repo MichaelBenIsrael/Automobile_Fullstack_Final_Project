@@ -3,10 +3,11 @@ import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { BsArrowLeftSquareFill } from 'react-icons/bs';
 import Navbar from "../common/Navbar";
+import { siteName } from "../../assets/const";
 
 const PageNotFound = () => {
     useEffect(() => {
-        document.title = "SiteLogo - 404 Page not found";
+        document.title = `${siteName} - 404 Page not found`;
     }, []);
     return (
         <>

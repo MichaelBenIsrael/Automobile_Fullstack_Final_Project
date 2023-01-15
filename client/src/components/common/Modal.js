@@ -9,7 +9,7 @@ const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
     const [info, setInfo] = useState(treatment?.treatmentInfo);
     const [date, setDate] = useState(treatment?.date);
     const [workerEmail, setWorkerEmail] = useState(treatment?.workerEmail);
-    const [carNumber, setCarNumber] = useState(treatment ? treatment.carNumber : new Date().toLocaleString());
+    const [carNumber, setCarNumber] = useState(treatment?.carNumber);
 
     const closeModal = () => {
         setDisplay(false);

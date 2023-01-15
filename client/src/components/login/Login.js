@@ -7,11 +7,12 @@ import FormControl from "../common/FormControl";
 import Modal from "../common/Modal";
 import { validateEmail, validatePassword } from "../../assets/validations";
 import { getCookie, saveCookie } from "../../assets/cookies";
+import { siteName } from "../../assets/const";
 
 const Login = () => {
 
   useEffect(() => {
-    document.title = "SiteLogo - Login";
+    document.title = `${siteName} - Login`;
 
     // Check cookies for "remember me"
     const email = getCookie("email");

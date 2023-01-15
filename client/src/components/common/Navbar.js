@@ -2,6 +2,7 @@ import { React } from "react";
 import { NavLink } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Button from "./Button";
+import { siteName } from "../../assets/const";
 
 const Navbar = ({ links, currentActive }) => {
     const showNav = () => {
@@ -13,7 +14,7 @@ const Navbar = ({ links, currentActive }) => {
             <div className="nav-center">
                 <div className="nav-header">
                     <NavLink to="/" className="nav-logo">
-                        SnM Garage
+                        {siteName}
                     </NavLink>
                     {links &&
                         <Button className="btn nav-btn" content={<GiHamburgerMenu style={{ verticalAlign: "middle", height: "30px" }} />}

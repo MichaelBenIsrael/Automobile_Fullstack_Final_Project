@@ -6,12 +6,13 @@ import Button from "../common/Button";
 import FormControl from "../common/FormControl";
 import Navbar from "../common/Navbar";
 import Modal from "../common/Modal";
+import { siteName } from "../../assets/const";
 
 
 const Forgotpassword = () => {
 
     useEffect(() => {
-        document.title = "SiteLogo - Forgot Password";
+        document.title = `${siteName} - Forgot Password`;
     }, []);
 
     const [email, setEmail] = useState("");

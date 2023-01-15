@@ -10,6 +10,7 @@ import { dashBoardLinkList, filters } from "../../assets/links";
 import { getCookie } from "../../assets/cookies";
 import { treatments } from "../../assets/data";
 import Button from "../common/Button";
+import { siteName } from "../../assets/const";
 
 const Dashboard = () => {
 
@@ -40,7 +41,7 @@ const Dashboard = () => {
 
 
     useEffect(() => {
-        document.title = "SiteLogo - Dashboard";
+        document.title = `${siteName} - Dashboard`;
         // fetch data from server
         getTotalRows();
         getTableRows();
