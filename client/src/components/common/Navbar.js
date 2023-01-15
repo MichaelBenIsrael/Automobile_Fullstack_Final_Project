@@ -12,7 +12,7 @@ const Navbar = ({ links, currentActive }) => {
             <div className="nav-center">
                 <div className="nav-header">
                     <NavLink to="/" className="nav-logo">
-                        SiteLogo
+                        SnM Garage
                     </NavLink>
                     {links &&
                         <button className="btn nav-btn" type="button" onClick={() => showNav()}>
@@ -20,15 +20,16 @@ const Navbar = ({ links, currentActive }) => {
                         </button>
                     }
                 </div>
-                <div className="nav-links">
-                    {links?.map((link, id) => {
-                        let className = "nav-link";
-                        if (link.name === currentActive) {
-                            className += " active";
-                        }
-                        return <NavLink key={id} to={link.url} className={className}>{link.name}</NavLink>
-                    })}
-                </div>
+                {links &&
+                    <div className="nav-links">
+                        {links.map((link, id) => {
+                            let className = "nav-link";
+                            if (link.name === currentActive) {
+                                className += " active";
+                            }
+                            return <NavLink key={id} to={link.url} className={className}>{link.name}</NavLink>
+                        })}
+                    </div>}
             </div>
         </nav>
     );

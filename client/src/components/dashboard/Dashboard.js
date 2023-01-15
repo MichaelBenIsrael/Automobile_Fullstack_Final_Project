@@ -73,10 +73,16 @@ const Dashboard = () => {
     };
 
     const saveEdit = (updatedTreatment) => {
-        let filteredRows = tableRows.filter((treatment) => treatment.treatmentNumber !== updatedTreatment.treatmentNumber);
-        filteredRows = [...filteredRows, updatedTreatment];
+        tableRows.forEach((treatment) => {
+            if (treatment.treatmentNumber === updatedTreatment.treatmentNumber) {
+                treatment.treatmentInfo = updatedTreatment.treatmentInfo;
+                treatment.date = updatedTreatment.date;
+                treatment.workerEmail = updatedTreatment.workerEmail;
+                treatment.carNumber = updatedTreatment.carNumber;
+            }
+        });
         setEditTreatment({});
-        setTableRows(filteredRows);
+        setTableRows([...tableRows]);
         // send request to update the server.
     }
 

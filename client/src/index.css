@@ -211,7 +211,7 @@ Navbar
 }
 
 .nav-logo {
-  font-size: 2rem;
+  font-size: 2em;
   text-decoration: none;
 }
 
@@ -621,14 +621,14 @@ Modal
 
   .nav-header {
     height: auto;
-    margin-right: 2rem;
+    margin-right: 5rem;
   }
 
   .nav-links {
     height: auto;
     flex-direction: row;
     align-items: center;
-    width: 100%;
+    width: 50%;
   }
 
   .nav-link {

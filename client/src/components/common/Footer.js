@@ -5,7 +5,7 @@ const Footer = () => {
         <footer className="page-footer">
             <p>
                 &copy; <span id="date"></span>
-                <span className="footer-logo"> SiteLogo </span>Built by MBI & SS
+                <span className="footer-logo"> SnM Garage </span>Built by MBI & SS
             </p>
         </footer>
     )
