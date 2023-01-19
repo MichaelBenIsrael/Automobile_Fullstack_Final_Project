@@ -54,6 +54,7 @@ npm install
 
 Should your server still be missing dependencies also run the commands:
 ```bash
+npm install nodemailer
 npm install mongoose
 npm install cors
 ```
