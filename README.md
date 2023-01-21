@@ -93,6 +93,12 @@ To start the server, we need to again travel to the server subfolder. Onces we g
 ```bash
 node server.js
 ```
+the server will be running by default on localhost:3232. 
+To change it for development process navigate to the 'server.js' file, and change the port on line 44.
+
+```javascript
+app.listen(3232, () => console.log('Server Started'))
+```
 
 And now you if all went well, you should see in the console those lines.
 ```bash
