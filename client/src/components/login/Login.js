@@ -1,14 +1,15 @@
 import { React } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Reaptcha from 'reaptcha'
+import axios from "axios";
 import Navbar from "../common/Navbar";
 import Button from "../common/Button";
 import FormControl from "../common/FormControl";
 import Modal from "../common/Modal";
 import { validateEmail, validatePassword } from "../../assets/validations";
-import { getCookie, saveCookie } from "../../assets/cookies";
-import { siteName } from "../../assets/const";
-import { ServerAPI } from "../../assets/api";
+import { getCookie, saveCookie, saveSession } from "../../assets/cookies";
+import Loader from "../common/Loader";
 
 const Login = () => {
 
@@ -17,18 +18,41 @@ const Login = () => {
   const [remember, setRemember] = useState(false);
   const [modalMessage, setModalMessage] = useState("Please fill the email and password, requirement are in the tooltip.");
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [recaptcha, setRecaptcha] = useState(false);
   const navigate = useNavigate();
 
+  const captchRef = useRef(null);
+
+  const verifyCaptcha = () => {
+    captchRef.current.getResponse().then(res => {
+      setRecaptcha(res);
+    })
+  }
+  const resetCaptcha = () => {
+    setRecaptcha(false);
+  }
+
   const onSubmit = async () => {
+    setLoading(true);
+    if (!recaptcha) {
+      setModalMessage("Please authenticate recaptcha.");
+      setShowModal(true);
+      setLoading(false);
+      return;
+    }
     if (validateEmail(userEmail) && validatePassword(userPassword)) {
       const res = await SendLoginRequest();
       if (res.sessionId) {
-        saveCookie("sessionId", res.sessionId);
         if (remember) {
+          saveCookie("sessionId", res.sessionId);
           saveCookie("email", userEmail);
           saveCookie("password", userPassword);
         }
-        navigate('/dashboard');
+        saveSession(res.sessionId);
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 10);
       } else {
         setModalMessage(`Failed to login, ${res.message}`);
         setShowModal(true);
@@ -38,43 +62,84 @@ const Login = () => {
       setModalMessage("Please fill the email and password, requirement are in the tooltip.");
       setShowModal(true);
     }
+    setLoading(false);
   }
 
   const SendLoginRequest = async () => {
-    const res = await fetch(`${ServerAPI}/login`, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: userEmail, password: userPassword }),
-    });
-
-    const resData = await res.json();
-    return resData;
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_SERVER_API}/login`, { email: userEmail, password: userPassword });
+      return res.data;
+    } catch (err) {
+      return { message: err.message };
+    }
   }
 
   useEffect(() => {
-    document.title = `${siteName} - Login`;
+    setLoading(true);
+    document.title = `${process.env.REACT_APP_SITE_NAME} - Login`;
 
     // Check cookies for "remember me"
     const email = getCookie("email");
     const password = getCookie("password");
-
     if (email && password) {
-      setUserEmail(email);
-      setUserPassword(password);
-      onSubmit();
+      const sessionId = getCookie('sessionId');
+      try {
+        axios.post(`${process.env.REACT_APP_SERVER_API}/login-session`, { sessionId: sessionId })
+          .then((res) => {
+            if (res.data.sessionId) {
+              saveCookie("sessionId", res.data.sessionId);
+              setTimeout(() => {
+                navigate("/dashboard");
+              }, 10);
+            } else {
+              setModalMessage(`Failed to login, ${res.data.message}`);
+              setShowModal(true);
+            }
+          });
+      } catch (err) {
+        setModalMessage(`Failed to login, ${err.message}`);
+        setShowModal(true);
+      }
+      finally {
+        setLoading(false)
+      }
     }
+    return () => setLoading(false);
   }, []);
+
+  useEffect(() => {
+    const sessionId = getCookie('sessionId');
+    if (sessionId) {
+      try {
+        axios.post(`${process.env.REACT_APP_SERVER_API}/login-session`, { sessionId: sessionId })
+          .then((res) => {
+            if (res.data.sessionId) {
+              saveSession(res.data.sessionId);
+              setTimeout(() => {
+                navigate("/dashboard");
+              }, 10);
+            } else {
+              setModalMessage(`Failed to login, ${res.data.message}`);
+              setShowModal(true);
+            }
+          });
+      } catch (err) {
+        setModalMessage(`Failed to login, ${err.message}`);
+        setShowModal(true);
+      }
+      finally {
+        setLoading(false)
+      }
+    }
+  }, [])
 
   return (
     <>
       <Navbar />
-
       <main className="page">
         <h1>Login to your account</h1>
         <form>
+          {loading && <Loader />}
           <FormControl
             inputType="email" inputId="email" placeHolder="Email Address" isRequired={false}
             containToolTip={true} toolTipContent="Example: johndoe@gmail.com" onChangeCallback={setUserEmail} />
@@ -87,6 +152,8 @@ const Login = () => {
           Lower case letter
           Special character
           A number." onChangeCallback={setUserPassword} />
+
+          <Reaptcha sitekey={process.env.REACT_APP_SITE_KEY} ref={captchRef} onVerify={verifyCaptcha} onExpire={resetCaptcha} />
 
           <div style={{ textAlign: "center" }}>
             <input type="checkbox" name="remember" id="remember" onChange={(e) => setRemember(e.target.checked)} />

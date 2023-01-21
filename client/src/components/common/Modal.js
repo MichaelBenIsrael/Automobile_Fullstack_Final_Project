@@ -16,14 +16,12 @@ const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
     }
 
     const saveTreatment = () => {
-        if (validateEmail(workerEmail) && !stringNullOrEmpty(info) && !stringNullOrEmpty(date) && !stringNullOrEmpty(carNumber)) {
-            let number, date;
+        if (validateEmail(workerEmail) && !stringNullOrEmpty(info) && !stringNullOrEmpty(date) && !stringNullOrEmpty(carNumber) && carNumber.length === 8 && !isNaN(carNumber)) {
+            let number;
             if (treatment) {
                 number = treatment.treatmentNumber;
-                date = treatment.date;
             } else {
                 number = 2000; // random number, will be assign in the backend.
-                date = new Date().toLocaleString();
             }
             const newTreatment = {
                 "treatmentNumber": number,
@@ -45,7 +43,7 @@ const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
                         <form style={{ alignItems: "center" }}>
                             <FormControl inputType="text" inputId="treatmentInformation" placeHolder="Treatment Information"
                                 content={info} isRequired={false} containToolTip={false} onChangeCallback={setInfo} />
-                            <FormControl inputType="date" inputId="date" placeHolder="Treatment Date" content={date}
+                            <FormControl inputType="date" inputId="date" placeHolder="Treatment Date" content={new Date(date)}
                                 isDate={true} isRequired={false} containToolTip={false} onChangeCallback={setDate} />
                             <FormControl inputType="email" inputId="workerEmail" placeHolder="Worker Email" content={workerEmail} isRequired={false}
                                 containToolTip={false} onChangeCallback={setWorkerEmail} />
@@ -57,7 +55,7 @@ const Modal = ({ shouldEdit, treatment, errorMessage, setDisplay, save }) => {
                     {!shouldEdit &&
                         <p className="text">{errorMessage}</p>}
 
-                    <Button className="btn" content="Close" onClickCallback={closeModal} />
+                    <Button className="reverse-btn" content="Close" onClickCallback={closeModal} />
                 </div>
             </div>
         </>
