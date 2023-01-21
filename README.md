@@ -1,70 +1,115 @@
-# Getting Started with Create React App
+# S&M Garage
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+S&M Garage is a learning experience for the developers (Shaked & Michael), as they approached this challenge with little knowledge about a fullstack applications.
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+First clone the repository containing both the server & client folders.
+```bash
+git clone https://github.com/ShakedSa/FullstackFinalProject.git
+```
+#
+After you have cloned the repository you will need to install all the dependencies, as they don't go into the repository for preformance issues of git.
 
-### `npm start`
+For installing the client dependencies you should first change to the client subfolder.
+```bash
+cd .\client\
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Then install the dependencies through the command:
+```bash
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Should your client still be missing dependencies also run the commands:
+```bash
+npm install react-icons
+npm install axios
+npm install react-router-dom
+```
 
-### `npm test`
+Now we need to set our env variables as our client is depending on them.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+First create in the root of the client folder a file .env, then you should add 3 variables:
 
-### `npm run build`
+```javascript
+REACT_APP_SITE_KEY = Your site key
+REACT_APP_SERVER_API = https://snmgarage-api-v8lq.onrender.com/api
+REACT_APP_SITE_NAME = SnM Garage
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### NOTE
+The site key will be given in private, so feel free to ask. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Installing the server dependencies are going to be a similar steps.
 
-### `npm run eject`
+First go back to the root of the project.
+```bash
+cd ..
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Then change to the server subfolder
+```bash
+cd .\server\
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+And again use the command:
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Should your server still be missing dependencies also run the commands:
+```bash
+npm install nodemailer
+npm install mongoose
+npm install cors
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Similarly to the client, the server is also depending on env variables. So once again you should create a file .env in the root of the server subfolder and add 2 variables:
 
-## Learn More
+```javascript
+SECRET_KEY = Your site secret key
+MONGO_DB_URL = Your mongo data base url
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### NOTE
+Since both the keys contains private information, they will be given in private, and again feel free to ask.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Usage
 
-### Code Splitting
+After all our dependencies are in place we can now start the application.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+To start the client, we need to travel back to the client subfolder. Onces we got there type
+```bash
+npm start
+```
 
-### Analyzing the Bundle Size
+and you will find that the client side is running on localhost:3000.
+#
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+To start the server, we need to again travel to the server subfolder. Onces we got there type
+```bash
+node server.js
+```
+the server will be running by default on localhost:3232. 
+To change it for development process navigate to the 'server.js' file, and change the port on line 44.
 
-### Making a Progressive Web App
+```javascript
+app.listen(3232, () => console.log('Server Started'))
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+And now you if all went well, you should see in the console those lines.
+```bash
+Server Started
+Connected to Database
+```
 
-### Advanced Configuration
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+As this is a learning project, we will probably won't expand it. Pull requests are always welcome.
 
-### Deployment
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[Braude](https://www.braude.ac.il/)
