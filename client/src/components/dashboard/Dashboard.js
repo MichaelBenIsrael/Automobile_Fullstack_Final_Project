@@ -1,6 +1,7 @@
 import { React } from "react";
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight } from "react-icons/bs";
 import { BiCog } from "react-icons/bi";
 import Navbar from "../common/Navbar";
@@ -8,10 +9,8 @@ import TableRow from "../common/TableRow";
 import Modal from "../common/Modal";
 import { dashBoardLinkList, filters } from "../../assets/links";
 import { getCookie } from "../../assets/cookies";
-import { treatments } from "../../assets/data";
 import Button from "../common/Button";
-import { siteName } from "../../assets/const";
-import { ServerAPI } from "../../assets/api";
+import Loader from "../common/Loader";
 
 const Dashboard = () => {
 
@@ -21,6 +20,16 @@ const Dashboard = () => {
         if (!sessionId) {
             navigate('/');
         }
+
+        document.title = `${process.env.REACT_APP_SITE_NAME} - Dashboard`;
+        // fetch data from server
+        setLoading(true);
+        getTableRows();
+        getTotalRows();
+        return () => {
+            setLoading(false);
+        }
+
     }, [navigate]);
 
     const [tableRows, setTableRows] = useState([]);
@@ -35,67 +44,71 @@ const Dashboard = () => {
 
     const [newTreatment, setNewTreatment] = useState(false);
 
+    /// 3 states.
+    /// 0 - idle
+    /// 1 - sort asending order.
+    /// 2 - sort descending order.
     const [directions, setDirections] = useState({
-        "number": true,
-        "info": true,
-        "date": true,
-        "email": true,
-        "carNumber": true
+        "number": 0,
+        "info": 0,
+        "date": 0,
+        "email": 0,
+        "carNumber": 0
     });
 
+    useEffect(() => {
+        getTableRows();
+        getTotalRows();
+    }, [searchParam, pageNumber])
 
     useEffect(() => {
-        document.title = `${siteName} - Dashboard`;
-        // fetch data from server
-        getTableRows()
-        getTotalRows();
-    }, []);
-
+        if (directions.number !== 0) {
+            sortByNumber();
+        } else if (directions.email !== 0) {
+            sortByEmail();
+        } else if (directions.date !== 0) {
+            sortByDate();
+        } else if (directions.email !== 0) {
+            sortByInformation();
+        } else if (directions.carNumber !== 0) {
+            sortByCar();
+        }
+    }, [tableRows])
 
     const getTableRows = async () => {
         // request from server rows of pageNumber
         setLoading(true);
-        const res = await fetch(`${ServerAPI}/dashboard/${getCookie("sessionId")}/?page=${pageNumber}&search=${searchParam}`, {
-            method: 'GET',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-        const rows = await res.json();
-        setTableRows(rows);
-        if (!directions.number) {
-            sortByNumber();
-        } else if (!directions.email) {
-            sortByEmail();
-        } else if (!directions.date) {
-            sortByDate();
-        } else if (!directions.info) {
-            sortByInformation();
-        } else if (!directions.carNumber) {
-            sortByCar();
+        try {
+            const rows = await axios.get(`${process.env.REACT_APP_SERVER_API}/dashboard/${getCookie("sessionId")}/?page=${pageNumber}&search=${searchParam}`);
+            setTableRows(rows.data);
+        } catch (err) {
+            console.log(err.message);
         }
         setLoading(false);
     };
 
     const getTotalRows = async () => {
         // request server for total number rows
-        const res = await fetch(`${ServerAPI}/dashboard/gettotal/${getCookie("sessionId")}`, {
-            method: 'GET',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-        const rows = await res.json();
-        setTotalRows(rows);
+        setLoading(true);
+        try {
+            const rows = await axios.get(`${process.env.REACT_APP_SERVER_API}/dashboard/gettotal/${getCookie("sessionId")}`);
+            setTotalRows(rows.data);
+        } catch (err) {
+            console.log(err.message);
+        }
+        setLoading(false);
     };
 
-    const deleteRow = (treatmentNumber) => {
-        const filteredRows = tableRows.filter((treatment) => treatment.treatmentNumber !== treatmentNumber);
-        setTableRows(filteredRows);
-        setTotalRows(totalRows - 1);
-        // send request to update the server.
+    const deleteRow = async (treatmentNumber) => {
+        setLoading(true);
+        try {
+            await axios.delete(`${process.env.REACT_APP_SERVER_API}/dashboard/delete/${treatmentNumber}`);
+            await getTableRows();
+            await getTotalRows();
+        } catch (err) {
+            console.log(err.message);
+        }
+        setLoading(false);
     };
 
     const editRow = (treatmentNumber) => {
@@ -104,22 +117,22 @@ const Dashboard = () => {
         setEditModal(true);
     };
 
-    const saveEdit = (updatedTreatment) => {
-        tableRows.forEach((treatment) => {
-            if (treatment.treatmentNumber === updatedTreatment.treatmentNumber) {
-                treatment.treatmentInfo = updatedTreatment.treatmentInfo;
-                treatment.date = updatedTreatment.date;
-                treatment.workerEmail = updatedTreatment.workerEmail;
-                treatment.carNumber = updatedTreatment.carNumber;
-            }
-        });
-        setEditTreatment({});
-        setTableRows([...tableRows]);
+    const saveEdit = async (updatedTreatment) => {
+        setLoading(true);
+        try {
+            await axios.patch(`${process.env.REACT_APP_SERVER_API}/dashboard/updates`, { ...updatedTreatment });
+            setEditTreatment({});
+            await getTableRows();
+            await getTotalRows();
+        } catch (err) {
+            console.log(err.message);
+        }
+        setLoading(false);
     }
 
     const sortByNumber = () => {
         let sortFunc;
-        if (directions.number) {
+        if (directions.number === 0 || directions.number === 2) {
             sortFunc = (row1, row2) => {
                 if (row1.treatmentNumber < row2.treatmentNumber) {
                     return -1;
@@ -129,6 +142,7 @@ const Dashboard = () => {
                 }
                 return 0;
             }
+            setDirections({ ...directions, "number": 1 });
         } else {
             sortFunc = (row1, row2) => {
                 if (row1.treatmentNumber > row2.treatmentNumber) {
@@ -139,31 +153,30 @@ const Dashboard = () => {
                 }
                 return 0;
             }
+            setDirections({ ...directions, "number": 2 });
         }
-        const sortedRows = tableRows.sort(sortFunc);
-        setDirections({ ...directions, "number": !directions.number });
-        setTableRows([...sortedRows]);
+        tableRows.sort(sortFunc);
     }
 
     const sortByInformation = () => {
         let sortFunc;
-        if (directions.info) {
+        if (directions.info === 0 || directions.info === 2) {
             sortFunc = (row1, row2) => {
-                return row1.treatmentInfo.localeCompare(row2.treatmentInfo);
+                return row1.treatmentInformation.localeCompare(row2.treatmentInformation);
             }
+            setDirections({ ...directions, "info": 1 });
         } else {
             sortFunc = (row1, row2) => {
-                return row2.treatmentInfo.localeCompare(row1.treatmentInfo);
+                return row2.treatmentInformation.localeCompare(row1.treatmentInformation);
             }
+            setDirections({ ...directions, "info": 2 });
         }
-        const sortedRows = tableRows.sort(sortFunc);
-        setDirections({ ...directions, "info": !directions.info });
-        setTableRows([...sortedRows]);
+        tableRows.sort(sortFunc);
     }
 
     const sortByDate = () => {
         let sortFunc;
-        if (directions.date) {
+        if (directions.date === 0 || directions.date === 2) {
             sortFunc = (row1, row2) => {
                 const date1 = new Date(row1.date), date2 = new Date(row2.date);
                 if (date1 < date2) {
@@ -174,6 +187,8 @@ const Dashboard = () => {
                 }
                 return 0;
             }
+            setDirections({ ...directions, "date": 1 });
+
         } else {
             sortFunc = (row1, row2) => {
                 const date1 = new Date(row1.date), date2 = new Date(row2.date);
@@ -185,31 +200,32 @@ const Dashboard = () => {
                 }
                 return 0;
             }
+            setDirections({ ...directions, "date": 2 });
+
         }
-        const sortedRows = tableRows.sort(sortFunc);
-        setDirections({ ...directions, "date": !directions.date });
-        setTableRows([...sortedRows]);
+        tableRows.sort(sortFunc);
     }
 
     const sortByEmail = () => {
         let sortFunc;
-        if (directions.email) {
+        if (directions.email === 0 || directions.email === 2) {
             sortFunc = (row1, row2) => {
                 return row1.workerEmail.localeCompare(row2.workerEmail);
             }
+            setDirections({ ...directions, "email": 1 });
+
         } else {
             sortFunc = (row1, row2) => {
                 return row2.workerEmail.localeCompare(row1.workerEmail);
             }
+            setDirections({ ...directions, "email": 2 });
         }
-        const sortedRows = tableRows.sort(sortFunc);
-        setDirections({ ...directions, "email": !directions.email });
-        setTableRows([...sortedRows]);
+        tableRows.sort(sortFunc);
     }
 
     const sortByCar = () => {
         let sortFunc;
-        if (directions.carNumber) {
+        if (directions.carNumber === 0 || directions.carNumber === 2) {
             sortFunc = (row1, row2) => {
                 if (row1.carNumber < row2.carNumber) {
                     return -1;
@@ -219,6 +235,8 @@ const Dashboard = () => {
                 }
                 return 0;
             }
+            setDirections({ ...directions, "carNumber": 1 });
+
         } else {
             sortFunc = (row1, row2) => {
                 if (row1.carNumber > row2.carNumber) {
@@ -229,29 +247,26 @@ const Dashboard = () => {
                 }
                 return 0;
             }
+            setDirections({ ...directions, "carNumber": 2 });
         }
-        const sortedRows = tableRows.sort(sortFunc);
-        setDirections({ ...directions, "carNumber": !directions.carNumber });
-        setTableRows([...sortedRows]);
+        tableRows.sort(sortFunc);
     }
 
     const addNewTreatment = async (treatment) => {
         // request from server rows of pageNumber
-        const res = await fetch(`${ServerAPI}/dashboard/createTreatment`, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ...treatment, sessionId: getCookie("sessionId") })
-        });
-        const rows = await res.json();
-        await getTableRows();
-        await getTotalRows();
+        setLoading(true);
+        try {
+            await axios.post(`${process.env.REACT_APP_SERVER_API}/dashboard/createTreatment`, { ...treatment, sessionId: getCookie("sessionId") });
+            await getTableRows();
+            await getTotalRows();
+        } catch (err) {
+            console.log(err.message);
+        }
+        setLoading(false);
     }
 
     const showFiltersOptions = () => {
-        document.querySelector('.filter-options').classList.toggle('show-links');
+        document.querySelector('.filter-options').classList.toggle('show-filters');
     }
 
     return (
@@ -263,10 +278,7 @@ const Dashboard = () => {
                     <div className="table-header">
                         <span>Treatments Details</span>
                         <div>
-                            <input placeholder="Search" onChange={async (e) => {
-                                setSearchParam(e.target.value);
-                                await getTableRows();
-                            }} />
+                            <input placeholder="Search" onChange={(e) => setSearchParam(e.target.value)} />
                         </div>
                         <Button className="btn nav-btn"
                             content={<BiCog style={{ verticalAlign: "middle", height: "30px" }} />}
@@ -278,7 +290,9 @@ const Dashboard = () => {
                             return <div onClick={(e) => { eval(callBackName); showFiltersOptions(); }} key={id} className="filter-option">{filter.name}</div>
                         })}
                     </div>
+
                     <div className="table-section">
+                        {loading && <Loader />}
                         <table>
                             <thead>
                                 <tr>
@@ -298,25 +312,29 @@ const Dashboard = () => {
                         </table>
                     </div>
                     <div className="pagination">
-                        <span style={{ fontSize: "0.9rem" }}>Displaying {pageNumber} - {pageNumber + 9} out of {totalRows} treatments</span>
+                        <span style={{ fontSize: "0.9rem" }}>Displaying {pageNumber * 10 - 9} - {pageNumber * 10} out of {totalRows} treatments</span>
                         <div className="pages">
-                            <div><BsChevronDoubleLeft style={{ verticalAlign: "bottom" }} onClick={() => { setPageNumber(1); getTableRows(); }} /></div>
+                            <div><BsChevronDoubleLeft style={{ verticalAlign: "bottom" }} onClick={() => { setPageNumber(1); }} /></div>
                             <div><BsChevronLeft onClick={() => {
                                 if ((pageNumber - 1) < 1) {
                                     return;
                                 }
                                 setPageNumber(pageNumber - 1);
-                                getTableRows();
                             }} /></div>
                             <div>{pageNumber}</div>
                             <div><BsChevronRight onClick={() => {
-                                if ((pageNumber + 1) * 10 > totalRows) {
+                                if (pageNumber * 10 >= totalRows) {
                                     return;
                                 }
                                 setPageNumber(pageNumber + 1);
-                                getTableRows();
                             }} /></div>
-                            <div><BsChevronDoubleRight onClick={() => { setPageNumber(totalRows % 10); getTableRows() }} /></div>
+                            <div><BsChevronDoubleRight onClick={() => {
+                                if (totalRows % 10 === 0) {
+                                    setPageNumber(totalRows / 10);
+                                } else {
+                                    setPageNumber(Math.ceil((totalRows / 10)));
+                                }
+                            }} /></div>
                         </div>
                     </div>
                 </div>
