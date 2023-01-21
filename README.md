@@ -20,6 +20,14 @@ Then install the dependencies through the command:
 ```bash
 npm install
 ```
+
+Should your client still be missing dependencies also run the commands:
+```bash
+npm install react-icons
+npm install axios
+npm install react-router-dom
+```
+
 Now we need to set our env variables as our client is depending on them.
 
 First create in the root of the client folder a file .env, then you should add 3 variables:
